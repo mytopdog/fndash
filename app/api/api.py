@@ -16,10 +16,23 @@ def home():
     return jsonify(foo='bar')
 
 
+@api.route('/active_users')
+def active_users():
+    time = datetime.datetime.now() - datetime.timedelta(minutes=30)
+    games = db.session.query(User).filter(datetime.datetime.fromtimestamp(User.lastmodified_total / 1e3) >= time).order_by(User.lastmodified_total.desc()).all()
+
+    serialized_users = list(map(lambda u: u.serialize(), users))
+
+
 @api.route('/recent_games')
 def recent_games():
+    time = datetime.datetime.now() - datetime.timedelta(minutes=30)
     games = db.session.query(Game).options(joinedload(Game.user)).order_by(
-        Game.time_played.desc()).limit(20).all()
+        Game.time_played.desc()).distinct(Game.user).all()
+    
+    for game in games:
+        current_app.logger.info(game.user)
+    
     serialized_recent_games = list(
         map(
             lambda game: dict(
