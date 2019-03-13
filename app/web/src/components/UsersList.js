@@ -11,13 +11,21 @@ const H5 = styled.h5`
   }
 `;
 
+const H4 = styled.h4`
+  color: ${({ theme }) => theme.primary};
+`;
+
 function UsersList({ title, users = [] }) {
   const usernames = users.map(u => <H5><a href={`/users/${u.id}`}>{u.username}</a></H5>);
 
   return (
     <Card>
       <h3>{title}</h3>
-      {usernames}
+      {usernames.length > 0 ? (
+        { usernames }
+      ) : (
+        <H4>No Currently Active Users</H4>
+      )}
     </Card>
   );
 }

@@ -1,10 +1,17 @@
 import { fork } from 'redux-saga/effects';
 import {
-  requestUsersSaga, requestUserSaga, requestJoinUserSaga, requestActiveUsersSaga,
+  requestUsersSaga,
+  requestUserSaga,
+  requestJoinUserSaga,
+  requestActiveUsersSaga,
+  activeUserCycleSaga,
 } from './usersSagas';
 import { requestUserGamesSaga, requestUserRecordsSaga, requestRecentGamesSaga } from './gamesSagas';
 import {
-  requestKdChartSaga, requestPlacementChartSaga, requestGamesChartSaga, requestTimePlayedChartSaga,
+  requestKdChartSaga,
+  requestPlacementChartSaga,
+  requestGamesChartSaga,
+  requestTimePlayedChartSaga,
 } from './chartSagas';
 import { requestAllDataSaga, requestModeDependantDataSaga } from './globalSagas';
 
@@ -23,5 +30,6 @@ export default function* () {
     fork(requestAllDataSaga),
     fork(requestModeDependantDataSaga),
     fork(requestActiveUsersSaga),
+    fork(activeUserCycleSaga),
   ];
 }

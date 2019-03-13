@@ -1,6 +1,8 @@
 const ACTIVE_USERS_REQUESTED = 'fn-dash/users/ACTIVE_USERS_REQUESTED';
 const ACTIVE_USERS_RECEIVED = 'fn-dash/users/ACTIVE_USERS_RECIEVED';
 const ACTIVE_USERS_REJECTED = 'fn-dash/users/ACTIVE_USERS_REJECTED';
+const START_REQUESTING_ACTIVE_USERS = 'fn-dash/users/START_REQUESTING_ACTIVE_USERS';
+const STOP_REQUESTING_ACTIVE_USERS = 'fn-dash/users/STOP_REQUESTING_ACTIVE_USERS';
 
 const USER_LIST_REQUESTED = 'fn-dash/users/USER_LIST_REQUESTED';
 const USER_LIST_RECEIVED = 'fn-dash/users/USER_LIST_RECEIVED';
@@ -18,6 +20,8 @@ export const types = {
   ACTIVE_USERS_REQUESTED,
   ACTIVE_USERS_RECEIVED,
   ACTIVE_USERS_REJECTED,
+  START_REQUESTING_ACTIVE_USERS,
+  STOP_REQUESTING_ACTIVE_USERS,
   USER_LIST_REQUESTED,
   USER_LIST_RECEIVED,
   USER_LIST_REJECTED,
@@ -52,10 +56,7 @@ export default (state = initialState, action) => {
         ...state,
         error: null,
         loading: false,
-        data: {
-          ...state.data,
-          activeUsers: payload,
-        },
+        activeUsers: payload,
       };
     }
     case ACTIVE_USERS_REJECTED: {
@@ -165,6 +166,14 @@ const rejectedActiveUsers = err => ({
   payload: err,
 });
 
+const startRequestingActiveUsers = () => ({
+  type: START_REQUESTING_ACTIVE_USERS,
+});
+
+const stopRequestingActiveUsers = () => ({
+  type: STOP_REQUESTING_ACTIVE_USERS,
+});
+
 const requestUserList = () => ({
   type: USER_LIST_REQUESTED,
 });
@@ -212,6 +221,8 @@ export const actions = {
   requestActiveUsers,
   receivedActiveUsers,
   rejectedActiveUsers,
+  startRequestingActiveUsers,
+  stopRequestingActiveUsers,
   requestUserList,
   receivedUserList,
   rejectedUserList,

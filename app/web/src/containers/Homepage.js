@@ -127,9 +127,15 @@ class Homepage extends React.PureComponent {
   }
 
   componentDidMount() {
-    const { requestActiveUsers } = this.props;
+    const { startRequestingActiveUsers } = this.props;
 
-    requestActiveUsers();
+    startRequestingActiveUsers();
+  }
+
+  componentWillUnmount() {
+    const { stopRequestingActiveUsers } = this.props;
+
+    stopRequestingActiveUsers();
   }
 
   onJoin(uid) {
@@ -147,7 +153,7 @@ class Homepage extends React.PureComponent {
     const { signupOpen } = this.state;
     const { users } = this.props;
 
-    const { activeUsers } = users.data;
+    const { activeUsers } = users;
 
     return (
       <React.Fragment>

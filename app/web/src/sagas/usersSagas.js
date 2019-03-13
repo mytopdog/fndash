@@ -1,4 +1,6 @@
-import { takeEvery, put, call } from 'redux-saga/effects';
+import {
+  takeEvery, put, call, actionChannel, take, race,
+} from 'redux-saga/effects';
 import api from '../util/api';
 import { types, actions } from '../ducks/users';
 
@@ -52,4 +54,27 @@ function* requestActiveUsers() {
 
 export function* requestActiveUsersSaga() {
   yield takeEvery(types.ACTIVE_USERS_REQUESTED, requestActiveUsers);
+}
+
+function delay(duration) {
+  const promise = new Promise((resolve) => {
+    setTimeout(() => resolve(true), duration);
+  });
+  return promise;
+}
+
+export function* activeUserCycleSaga() {
+  const channel = yield actionChannel(types.START_REQUESTING_ACTIVE_USERS);
+
+  while (yield take(channel)) {
+    while (true) {
+      yield put(actions.requestActiveUsers());
+      const { stopped } = yield race({
+        delay: call(delay, 60000),
+        stopped: take(types.STOP_REQUESTING_ACTIVE_USERS),
+      });
+
+      if (stopped) break;
+    }
+  }
 }
