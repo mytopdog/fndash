@@ -1,5 +1,7 @@
 import { fork } from 'redux-saga/effects';
-import { requestUsersSaga, requestUserSaga, requestJoinUserSaga, requestActiveUsersSaga } from './usersSagas';
+import {
+  requestUsersSaga, requestUserSaga, requestJoinUserSaga, requestActiveUsersSaga,
+} from './usersSagas';
 import { requestUserGamesSaga, requestUserRecordsSaga, requestRecentGamesSaga } from './gamesSagas';
 import {
   requestKdChartSaga, requestPlacementChartSaga, requestGamesChartSaga, requestTimePlayedChartSaga,
