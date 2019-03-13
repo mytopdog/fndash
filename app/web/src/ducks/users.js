@@ -1,3 +1,7 @@
+const ACTIVE_USERS_REQUESTED = 'fn-dash/users/ACTIVE_USERS_REQUESTED';
+const ACTIVE_USERS_RECEIVED = 'fn-dash/users/ACTIVE_USERS_RECIEVED';
+const ACTIVE_USERS_REJECTED = 'fn-dash/users/ACTIVE_USERS_REJECTED';
+
 const USER_LIST_REQUESTED = 'fn-dash/users/USER_LIST_REQUESTED';
 const USER_LIST_RECEIVED = 'fn-dash/users/USER_LIST_RECEIVED';
 const USER_LIST_REJECTED = 'fn-dash/users/USER_LIST_REJECTED';
@@ -11,6 +15,9 @@ const JOIN_USER_RECEIVED = 'fn-dash/user/NEW_USER_RECEIVED';
 const JOIN_USER_REJECTED = 'fn-dash/user/NEW_USER_REJECTED';
 
 export const types = {
+  ACTIVE_USERS_REQUESTED,
+  ACTIVE_USERS_RECEIVED,
+  ACTIVE_USERS_REJECTED,
   USER_LIST_REQUESTED,
   USER_LIST_RECEIVED,
   USER_LIST_REJECTED,
@@ -33,6 +40,31 @@ export default (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
+    case ACTIVE_USERS_REQUESTED: {
+      return {
+        ...state,
+        error: null,
+        loading: true,
+      };
+    }
+    case ACTIVE_USERS_RECEIVED: {
+      return {
+        ...state,
+        error: null,
+        loading: false,
+        data: {
+          ...state.data,
+          activeUsers: payload,
+        },
+      };
+    }
+    case ACTIVE_USERS_REJECTED: {
+      return {
+        ...state,
+        error: payload,
+        loading: false,
+      };
+    }
     case JOIN_USER_REQUESTED: {
       return {
         ...state,
@@ -119,6 +151,20 @@ export default (state = initialState, action) => {
   }
 };
 
+const requestActiveUsers = () => ({
+  type: ACTIVE_USERS_REQUESTED,
+});
+
+const receivedActiveUsers = activeUsers => ({
+  type: ACTIVE_USERS_RECEIVED,
+  payload: activeUsers,
+});
+
+const rejectedActiveUsers = err => ({
+  type: ACTIVE_USERS_REJECTED,
+  payload: err,
+});
+
 const requestUserList = () => ({
   type: USER_LIST_REQUESTED,
 });
@@ -163,6 +209,9 @@ const rejectedJoinUser = err => ({
 });
 
 export const actions = {
+  requestActiveUsers,
+  receivedActiveUsers,
+  rejectedActiveUsers,
   requestUserList,
   receivedUserList,
   rejectedUserList,

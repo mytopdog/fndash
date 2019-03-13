@@ -2,9 +2,8 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { actions as gamesActions } from '../ducks/games';
 import { actions as userActions } from '../ducks/users';
-import GamesList from '../components/GamesList';
+import UsersList from '../components/UsersList';
 import Column from '../components/Column';
 import SearchBar from '../components/SearchBar';
 import Container from '../components/Container';
@@ -17,7 +16,7 @@ const Banner = styled.div`
   width: 100%;
   box-shadow: 0px 4px 2px -2px ${({ theme }) => theme.black};
   text-align: center;
-  padding: 2.25rem 0 2rem;
+  padding: 1rem 0 2rem;
   background-color: ${({ theme }) => theme.black};
 
   h1 {
@@ -27,7 +26,7 @@ const Banner = styled.div`
   }
 
   img {
-    max-height: 16rem;
+    max-height: 14rem;
   }
 `;
 
@@ -58,6 +57,7 @@ const homeStyles = {
     backgroundColor: mainTheme.black,
     width: '100%',
     height: '100%',
+    minHeight: 50,
     border: 'none',
     boxShadow: 'none',
     cursor: 'text',
@@ -127,9 +127,9 @@ class Homepage extends React.PureComponent {
   }
 
   componentDidMount() {
-    const { requestRecentGames } = this.props;
+    const { requestActiveUsers } = this.props;
 
-    requestRecentGames();
+    requestActiveUsers();
   }
 
   onJoin(uid) {
@@ -145,9 +145,9 @@ class Homepage extends React.PureComponent {
 
   render() {
     const { signupOpen } = this.state;
-    const { games, users } = this.props;
+    const { users } = this.props;
 
-    const data = games.data.games;
+    const { activeUsers } = users.data;
 
     return (
       <React.Fragment>
@@ -164,7 +164,7 @@ class Homepage extends React.PureComponent {
         <HomeContainer>
           <SearchBar styles={homeStyles} placeholder="Select User..." />
           <HomeColumn>
-            <GamesList games={data} title="All Recent Games" />
+            <UsersList users={activeUsers} title="Active Users" />
           </HomeColumn>
         </HomeContainer>
         <Footer />
@@ -173,13 +173,12 @@ class Homepage extends React.PureComponent {
   }
 }
 
-const mapStateToProps = ({ games, users }) => ({
-  games,
+const mapStateToProps = ({ users }) => ({
   users,
 });
 
 const matchDispatchToProps = dispatch => ({
-  ...bindActionCreators(gamesActions, dispatch),
+  ...bindActionCreators(userActions, dispatch),
   requestJoinUser: uid => dispatch(userActions.requestJoinUser(uid)),
   rejectedJoinUser: err => dispatch(userActions.rejectedJoinUser(err)),
 });

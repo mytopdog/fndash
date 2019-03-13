@@ -40,3 +40,16 @@ function* requestJoinUser({ payload }) {
 export function* requestJoinUserSaga() {
   yield takeEvery(types.JOIN_USER_REQUESTED, requestJoinUser);
 }
+
+function* requestActiveUsers() {
+  try {
+    const response = yield call(api.getActiveUsers);
+    yield put(actions.receivedActiveUsers(response.data));
+  } catch (err) {
+    yield put(actions.rejectedActiveUsers(err));
+  }
+}
+
+export function* requestActiveUsersSaga() {
+  yield takeEvery(types.ACTIVE_USERS_REQUESTED, requestActiveUsers);
+}

@@ -33,22 +33,15 @@ const GameDiv = styled.div`
   }
 `;
 
-const H5 = styled.h5`
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%);
-`;
-
 function Game({
   data: {
-    mode, time_played: timePlayed, kills, placement, username,
+    mode, time_played: timePlayed, kills, placement,
   },
 }) {
   return (
     <GameDiv>
       <div>
         <h5>{mode} Match</h5>
-        {username && <H5>{username}</H5>}
         <p>{moment(timePlayed).format('MMM Do - h:mm a')}</p>
       </div>
       <div>

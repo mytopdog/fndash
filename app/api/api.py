@@ -19,10 +19,10 @@ def home():
 @api.route('/active_users')
 def active_users():
     time = datetime.datetime.now() - datetime.timedelta(minutes=30)
-    users = db.session.query(User).join(Game).filter(Game.time_played >= time).all()
+    users = db.session.query(User).join(Game).filter(Game.time_played >= time).distinct(User.id).all()
 
 
-    serialized_users = list(map(lambda u: dict(username=u.username), users))
+    serialized_users = list(map(lambda u: dict(username=u.username, id=u.id), users))
 
     return jsonify(serialized_users)
 
